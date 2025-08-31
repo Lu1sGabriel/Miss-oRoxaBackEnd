@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/missao_roxa_db
+    username: postgres
+    password: postgres1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: true
+
+  profiles:
+    #    active: authorities-creation
+    active: dev
+
+  jackson:
+    time-zone: America/Sao_Paulo
+
+server:
+  port: 8080
+
+security:
+  argon2:
+    salt-length: 16
+    hash-length: 32
+    parallelism: 1
+    memory: 15360
+    iterations: 2
+
+jwt:
+  private:
+    key: classpath:jwtRSA256-private.pem
+  public:
+    key: classpath:jwtRSA256-public.pem
+  expiry-seconds: 3600

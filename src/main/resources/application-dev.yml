@@ -1,0 +1,11 @@
+security:
+  argon2:
+    memory: 4096
+    iterations: 1
+
+spring:
+  jpa:
+    show-sql: true
+
+jwt:
+  expiry-seconds: 86400
