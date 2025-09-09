@@ -5,7 +5,7 @@ import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.Account
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Password;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
-import org.missao.roxa.missaoroxabackend.modules.account.dto.AccountCreateDto;
+import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountCreateDto;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 
 public final class AccountFactory {
@@ -14,7 +14,7 @@ public final class AccountFactory {
     }
 
     public static AccountEntity create(UserEntity user, AccountCreateDto dto) {
-        return new AccountEntity(
+        var account = new AccountEntity(
                 user,
                 new AccountCredentials(
                         new Email(dto.email()),
@@ -22,6 +22,8 @@ public final class AccountFactory {
                         new PhoneNumber(dto.phoneNumber())
                 )
         );
+        user.setAccount(account);
+        return account;
     }
 
 }
