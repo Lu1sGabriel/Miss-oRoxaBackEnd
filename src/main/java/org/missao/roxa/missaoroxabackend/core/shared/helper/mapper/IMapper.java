@@ -12,7 +12,7 @@ public interface IMapper<ResponseDTO extends IMappableDto, Entity extends IMappa
 
     Page<ResponseDTO> toDtoPage(Page<Entity> entities);
 
-    default ResponseDTO toDto(Entity entity, List<Entity> relatedEntities) {
+    default ResponseDTO toDtoWithRelatedEntities(Entity entity) {
         return toDto(entity);
     }
 
