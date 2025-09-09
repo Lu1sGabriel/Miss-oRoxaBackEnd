@@ -10,9 +10,6 @@ import java.time.Instant;
 @Getter
 public class AccountDateInfo {
 
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -20,7 +17,6 @@ public class AccountDateInfo {
     private Instant deletedAt;
 
     public AccountDateInfo() {
-        this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 

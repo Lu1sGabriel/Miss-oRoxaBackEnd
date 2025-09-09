@@ -3,6 +3,8 @@ package org.missao.roxa.missaoroxabackend.modules.account.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.AccountCredentials;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.AccountDateInfo;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.AccountGamification;
@@ -17,13 +19,13 @@ import java.util.UUID;
 @Table(name = "accounts")
 @NoArgsConstructor
 @Getter
-public class AccountEntity implements Serializable {
+public class AccountEntity implements Serializable, IMappableEntity {
 
     @Serial
     private static final long serialVersionUID = -2773921389709128763L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedUuidV7
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)
