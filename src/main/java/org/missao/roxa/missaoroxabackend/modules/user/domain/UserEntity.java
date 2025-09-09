@@ -3,13 +3,18 @@ package org.missao.roxa.missaoroxabackend.modules.user.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.metadata.UserDateInfo;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.BirthDate;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,8 +28,16 @@ public class UserEntity implements Serializable, IMappableEntity {
     private static final long serialVersionUID = 4475953970920573774L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedUuidV7
     private UUID id;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
+    private AccountEntity account;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
+    private AddressEntity address;
 
     @Embedded
     @AttributeOverride(name = "fullName", column = @Column(name = "full_name", nullable = false, unique = true))
@@ -41,6 +54,16 @@ public class UserEntity implements Serializable, IMappableEntity {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.dateInfo = new UserDateInfo();
+    }
+
+    public void changeFullName(String fullName) {
+        this.fullName = new FullName(fullName);
+        getDateInfo().update();
+    }
+
+    public void changeBirthDate(LocalDate birthDate) {
+        this.birthDate = new BirthDate(birthDate);
+        getDateInfo().update();
     }
 
     @Override
