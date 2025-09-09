@@ -1,4 +1,4 @@
-package org.missao.roxa.missaoroxabackend.modules.account.dto;
+package org.missao.roxa.missaoroxabackend.modules.account.presentation.dto;
 
 public record AccountCreateDto(
         String email,
