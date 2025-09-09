@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
 import org.missao.roxa.missaoroxabackend.modules.authority.domain.enums.IAuthority;
 import org.missao.roxa.missaoroxabackend.modules.authority.domain.value.AuthorityDescription;
 import org.missao.roxa.missaoroxabackend.modules.authority.domain.value.AuthorityName;
@@ -23,7 +24,7 @@ public class AuthorityEntity implements Serializable {
     private static final long serialVersionUID = 235567809685984419L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedUuidV7
     private UUID id;
 
     @Embedded
