@@ -1,5 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.account.domain.metadata;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class AccountCredentials {
     @Column(name = "password", nullable = false)
     private Password password;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @AttributeOverride(name = "number", column = @Column(name = "phone_number", nullable = false, unique = true))
     private PhoneNumber phoneNumber;
 
     public AccountCredentials(Email email, Password password, PhoneNumber phoneNumber) {
@@ -30,16 +31,16 @@ public class AccountCredentials {
         this.phoneNumber = phoneNumber;
     }
 
-    public void changeEmail(Email email) {
-        this.email = email;
+    public void changeEmail(String email) {
+        this.email = new Email(email);
     }
 
-    public void changePassword(Password password) {
-        this.password = password;
+    public void changePassword(String password) {
+        this.password = new Password(password);
     }
 
-    public void changePhoneNumber(PhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void changePhoneNumber(String phoneNumber) {
+        this.phoneNumber = new PhoneNumber(phoneNumber);
     }
 
 }
