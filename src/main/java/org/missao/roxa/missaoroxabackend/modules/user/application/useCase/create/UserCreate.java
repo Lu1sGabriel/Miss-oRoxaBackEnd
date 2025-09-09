@@ -5,6 +5,8 @@ import org.missao.roxa.missaoroxabackend.modules.account.domain.factory.AccountF
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.factory.AddressFactory;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.infrastructure.repository.MunicipalityRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.factory.UserFactory;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserCreateDto;
@@ -13,19 +15,22 @@ import org.missao.roxa.missaoroxabackend.modules.user.shared.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class UserCreate implements IUserCreate {
-
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
     private final AddressRepository addressRepository;
+    private final MunicipalityRepository municipalityRepository;
     private final UserMapper mapper;
 
-    public UserCreate(UserRepository userRepository, AccountRepository accountRepository,
-                      AddressRepository addressRepository, UserMapper mapper) {
+    public UserCreate(UserRepository userRepository, AccountRepository accountRepository, AddressRepository addressRepository,
+                      MunicipalityRepository municipalityRepository, UserMapper mapper) {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
         this.addressRepository = addressRepository;
+        this.municipalityRepository = municipalityRepository;
         this.mapper = mapper;
     }
 
@@ -35,25 +40,28 @@ public class UserCreate implements IUserCreate {
         validateUniqueConstraint(dto);
 
         final var user = userRepository.save(UserFactory.create(dto));
-        final var account = accountRepository.save(AccountFactory.create(user, dto.account()));
-        final var address = addressRepository.save(AddressFactory.create(user, dto.address()));
+        accountRepository.save(AccountFactory.create(user, dto.account()));
 
-        return mapper.toDto(user, account, address);
+        final var municipality = findMunicipality(dto.address().municipalityId());
+        addressRepository.save(AddressFactory.create(user, municipality, dto.address()));
+
+        return mapper.toDto(user);
     }
-
 
     private void validateUniqueConstraint(UserCreateDto dto) {
         if (userRepository.findByFullName_FullName(dto.fullName()).isPresent()) {
             throw HttpException.conflict("A user with that name already exists.");
         }
-
         if (accountRepository.findByCredentials_Email_Email(dto.account().email()).isPresent()) {
             throw HttpException.conflict("A user with that email already exists.");
         }
-
         if (accountRepository.findByCredentials_PhoneNumber_Number(dto.account().phoneNumber()).isPresent()) {
             throw HttpException.conflict("A user with that phone number already exists.");
         }
+    }
+
+    private MunicipalityEntity findMunicipality(UUID id) {
+        return municipalityRepository.findById(id).orElseThrow(() -> HttpException.notFound("Municipality not found with the provide ID"));
     }
 
 }
