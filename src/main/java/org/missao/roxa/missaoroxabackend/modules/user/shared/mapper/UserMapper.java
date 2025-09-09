@@ -2,9 +2,9 @@ package org.missao.roxa.missaoroxabackend.modules.user.shared.mapper;
 
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMapper;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
-import org.missao.roxa.missaoroxabackend.modules.account.dto.AccountResponseDto;
+import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
-import org.missao.roxa.missaoroxabackend.modules.address.dto.AddressResponseDto;
+import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserResponseDto;
 import org.springframework.data.domain.Page;
@@ -21,31 +21,8 @@ public class UserMapper implements IMapper<UserResponseDto, UserEntity> {
                 entity.getId(),
                 entity.getFullName().getValue(),
                 entity.getBirthDate().getValue(),
-                entity.getDateInfo().getCreatedAt(),
-                null,
-                null
-        );
-    }
-
-    public UserResponseDto toDto(UserEntity entity, AccountEntity accountEntity) {
-        return new UserResponseDto(
-                entity.getId(),
-                entity.getFullName().getValue(),
-                entity.getBirthDate().getValue(),
-                entity.getDateInfo().getCreatedAt(),
-                createAccountResponseDto(accountEntity),
-                null
-        );
-    }
-
-    public UserResponseDto toDto(UserEntity userEntity, AccountEntity accountEntity, AddressEntity addressEntity) {
-        return new UserResponseDto(
-                userEntity.getId(),
-                userEntity.getFullName().getValue(),
-                userEntity.getBirthDate().getValue(),
-                userEntity.getDateInfo().getCreatedAt(),
-                createAccountResponseDto(accountEntity),
-                createAddressResponseDto(addressEntity)
+                createAccountResponseDto(entity.getAccount()),
+                createAddressResponseDto(entity.getAddress())
         );
     }
 
@@ -64,14 +41,16 @@ public class UserMapper implements IMapper<UserResponseDto, UserEntity> {
     private static AccountResponseDto createAccountResponseDto(AccountEntity accountEntity) {
         return new AccountResponseDto(
                 accountEntity.getId(),
-                accountEntity.getUser().getId(),
                 accountEntity.getCredentials().getEmail().getValue(),
-                accountEntity.getCredentials().getPassword().getValue(),
                 accountEntity.getCredentials().getPhoneNumber().getValue(),
                 accountEntity.getGamification().getLevel().getValue(),
                 accountEntity.getGamification().getXp().getValue(),
                 accountEntity.getGamification().getCoin().getValue(),
-                accountEntity.getDateInfo().getCreatedAt()
+                new AccountResponseDto.User(
+                        accountEntity.getUser().getId(),
+                        accountEntity.getUser().getFullName().getValue(),
+                        accountEntity.getUser().getBirthDate().getValue()
+                )
         );
     }
 
@@ -79,13 +58,16 @@ public class UserMapper implements IMapper<UserResponseDto, UserEntity> {
         return new AddressResponseDto(
                 addressEntity.getId(),
                 addressEntity.getUser().getId(),
+                addressEntity.getMunicipality().getId(),
+                addressEntity.getMunicipality().getName().getValue(),
+                addressEntity.getMunicipality().getState().getId(),
+                addressEntity.getMunicipality().getState().getName().getValue(),
+                addressEntity.getMunicipality().getState().getUfCode().getValue(),
+                addressEntity.getMunicipality().getState().getUf().getValue(),
                 addressEntity.getPostalCode().getValue(),
                 addressEntity.getStreet().getValue(),
                 addressEntity.getComplement().getValue(),
-                addressEntity.getNeighborhood().getValue(),
-                addressEntity.getCity().getValue(),
-                addressEntity.getState().getValue(),
-                addressEntity.getDateInfo().getCreatedAt()
+                addressEntity.getNeighborhood().getValue()
         );
     }
 
