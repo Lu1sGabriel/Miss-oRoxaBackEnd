@@ -3,8 +3,14 @@ package org.missao.roxa.missaoroxabackend.modules.address.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.metaData.AddressDateInfo;
-import org.missao.roxa.missaoroxabackend.modules.address.domain.value.*;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.value.Complement;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.value.Neighborhood;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.value.Street;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 
 import java.io.Serial;
@@ -16,18 +22,22 @@ import java.util.UUID;
 @Table(name = "addresses")
 @NoArgsConstructor
 @Getter
-public class AddressEntity implements Serializable {
+public class AddressEntity implements Serializable, IMappableEntity {
 
     @Serial
     private static final long serialVersionUID = -1054928725160826558L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedUuidV7
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "municipality_id", nullable = false)
+    private MunicipalityEntity municipality;
 
     @Embedded
     @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", nullable = false))
@@ -46,24 +56,16 @@ public class AddressEntity implements Serializable {
     private Neighborhood neighborhood;
 
     @Embedded
-    @AttributeOverride(name = "city", column = @Column(name = "city", nullable = false))
-    private City city;
-
-    @Embedded
-    @AttributeOverride(name = "state", column = @Column(name = "state", nullable = false))
-    private State state;
-
-    @Embedded
     private AddressDateInfo dateInfo;
 
-    public AddressEntity(UserEntity userEntity, PostalCode postalCode, Street street, Complement complement, Neighborhood neighborhood, City city, State state) {
-        this.user = userEntity;
+    public AddressEntity(UserEntity user, MunicipalityEntity municipality, PostalCode postalCode,
+                         Street street, Complement complement, Neighborhood neighborhood) {
+        this.user = user;
+        this.municipality = municipality;
         this.postalCode = postalCode;
         this.street = street;
         this.complement = complement;
         this.neighborhood = neighborhood;
-        this.city = city;
-        this.state = state;
         this.dateInfo = new AddressDateInfo();
     }
 
@@ -81,14 +83,6 @@ public class AddressEntity implements Serializable {
 
     public void changeNeighborhood(Neighborhood neighborhood) {
         this.neighborhood = neighborhood;
-    }
-
-    public void changeCity(City city) {
-        this.city = city;
-    }
-
-    public void changeState(State state) {
-        this.state = state;
     }
 
     @Override

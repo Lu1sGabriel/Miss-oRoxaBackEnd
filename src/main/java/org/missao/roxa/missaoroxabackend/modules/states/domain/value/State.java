@@ -1,4 +1,4 @@
-package org.missao.roxa.missaoroxabackend.modules.address.domain.value;
+package org.missao.roxa.missaoroxabackend.modules.states.domain.value;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
@@ -10,31 +10,31 @@ import java.util.regex.Pattern;
 
 @Embeddable
 @NoArgsConstructor
-@EqualsAndHashCode(of = "state")
+@EqualsAndHashCode(of = "name")
 public final class State {
 
-    private String state;
+    private String name;
 
     private static final Pattern REGEX = Pattern.compile("^[A-Z]{2}$");
 
-    public State(String state) {
-        this.state = validate(state);
+    public State(String name) {
+        this.name = validate(name);
     }
 
     private static String validate(String state) {
         if (state == null || StringUtils.isBlank(state)) {
-            throw HttpException.badRequest("State cannot be null or empty");
+            throw HttpException.badRequest("State name cannot be null or empty");
         }
 
         if (!REGEX.matcher(state).matches()) {
-            throw HttpException.badRequest("Invalid state format. Expected two uppercase letters, e.g., SP");
+            throw HttpException.badRequest("Invalid state name format. Expected two uppercase letters, e.g., SP");
         }
 
         return state.trim();
     }
 
     public String getValue() {
-        return state;
+        return name;
     }
 
 }

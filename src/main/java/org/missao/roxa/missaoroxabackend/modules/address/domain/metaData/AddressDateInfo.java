@@ -9,10 +9,6 @@ import java.time.Instant;
 @Embeddable
 @Getter
 public class AddressDateInfo {
-
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -20,7 +16,6 @@ public class AddressDateInfo {
     private Instant deletedAt;
 
     public AddressDateInfo() {
-        this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 
