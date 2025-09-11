@@ -43,4 +43,8 @@ public class AccountCredentials {
         this.phoneNumber = new PhoneNumber(phoneNumber);
     }
 
+    public void checkIfPasswordMatch(String currentPassword) {
+        this.getPassword().isPasswordMatches(this.getPassword().getValue(), currentPassword);
+    }
+
 }
