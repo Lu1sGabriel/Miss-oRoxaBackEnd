@@ -2,6 +2,7 @@ package org.missao.roxa.missaoroxabackend.modules.account.presentation.controlle
 
 import org.missao.roxa.missaoroxabackend.modules.account.application.useCase.AccountUseCase;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountChangeEmailDto;
+import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountChangePasswordDto;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountChangePhoneNumberDto;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountResponseDto;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,13 @@ public class AccountController {
                                                                 @RequestBody AccountChangePhoneNumberDto dto) {
         var account = useCase.changePhoneNumber().change(userId, dto);
         return ResponseEntity.ok().body(account);
+    }
+
+    @PatchMapping(value = "/change-password/{user-id}")
+    public ResponseEntity<String> changePassword(@PathVariable(value = "user-id") UUID userId,
+                                                 @RequestBody AccountChangePasswordDto dto) {
+        useCase.changePassword().change(userId, dto);
+        return ResponseEntity.ok().body("Password changed successfully.");
     }
 
 }
