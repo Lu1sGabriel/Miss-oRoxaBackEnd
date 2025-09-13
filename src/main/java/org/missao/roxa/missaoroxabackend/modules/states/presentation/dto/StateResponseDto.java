@@ -11,7 +11,7 @@ public record StateResponseDto(
         List<Municipality> municipality
 ) implements IMappableDto {
 
-    public record Municipality(UUID id, String name) {
+    protected record Municipality(UUID id, String name) {
     }
 
 }

@@ -14,6 +14,6 @@ public record AccountResponseDto(
         int coin,
         User user
 ) implements IMappableDto {
-    public record User(UUID userId, String fullName, LocalDate birthDate) {
+    protected record User(UUID userId, String fullName, LocalDate birthDate) {
     }
 }
