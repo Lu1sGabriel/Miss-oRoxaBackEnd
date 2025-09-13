@@ -39,7 +39,7 @@ public class StateEntity implements Serializable, IMappableEntity {
     private UF uf;
 
     @OneToMany(mappedBy = "state", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<MunicipalityEntity> municipalities = new HashSet<>();
+    private final Set<MunicipalityEntity> municipalities = new HashSet<>();
 
     @Override
     public boolean equals(Object object) {
