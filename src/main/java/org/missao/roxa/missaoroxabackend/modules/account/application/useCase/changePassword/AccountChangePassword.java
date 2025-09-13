@@ -6,6 +6,7 @@ import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.Accoun
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -21,6 +22,7 @@ public class AccountChangePassword implements IAccountChangePassword {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void change(UUID userId, AccountChangePasswordDto dto) {
         if (userId == null) {
             throw HttpException.badRequest("User ID must not be null.");

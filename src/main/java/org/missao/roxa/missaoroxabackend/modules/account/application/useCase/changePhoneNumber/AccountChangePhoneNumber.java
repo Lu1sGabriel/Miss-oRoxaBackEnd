@@ -2,6 +2,7 @@ package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.ch
 
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountChangePhoneNumberDto;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountResponseDto;
@@ -9,6 +10,7 @@ import org.missao.roxa.missaoroxabackend.modules.account.shared.mapper.AccountMa
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -26,6 +28,7 @@ public class AccountChangePhoneNumber implements IAccountChangePhoneNumber {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public AccountResponseDto change(UUID userId, AccountChangePhoneNumberDto dto) {
         if (userId == null) {
             throw HttpException.badRequest("User ID cannot be null.");
@@ -56,7 +59,7 @@ public class AccountChangePhoneNumber implements IAccountChangePhoneNumber {
 
     private Predicate<AccountEntity> validePhoneNumberUniqueConstraint(String phoneNumber) {
         return AccountEntity -> {
-            if (accountRepository.findByCredentials_PhoneNumber_Number(phoneNumber).isPresent()) {
+            if (accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(phoneNumber)).isPresent()) {
                 throw HttpException.conflict(
                         "There is already an account associated with this mobile number."
                 );

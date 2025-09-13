@@ -2,6 +2,7 @@ package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.ch
 
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountChangeEmailDto;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountResponseDto;
@@ -46,7 +47,7 @@ public class AccountChangeEmail implements IAccountChangeEmail {
 
     private Predicate<AccountEntity> validateUniqueEmailConstraint(final AccountChangeEmailDto dto) {
         return account -> {
-            if (accountRepository.findByCredentials_Email_Email(dto.email()).isPresent()) {
+            if (accountRepository.findByCredentials_Email(new Email(dto.email())).isPresent()) {
                 throw HttpException.conflict("There is already an account with that email.");
             }
             return true;

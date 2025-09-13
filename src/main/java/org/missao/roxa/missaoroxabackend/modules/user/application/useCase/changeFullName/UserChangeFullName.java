@@ -2,6 +2,7 @@ package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.chang
 
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserChangeFullNameDto;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserResponseDto;
@@ -40,7 +41,7 @@ public class UserChangeFullName implements IUserChangeFullName {
 
     private Predicate<UserEntity> validateUniqueFullName(final UserChangeFullNameDto dto) {
         return user -> {
-            if (userRepository.findByFullName_FullName(dto.fullName()).isPresent()) {
+            if (userRepository.findByFullName(new FullName(dto.fullName()).getValue()).isPresent()) {
                 throw HttpException.conflict("An user with that full name already exists.");
             }
             return true;
