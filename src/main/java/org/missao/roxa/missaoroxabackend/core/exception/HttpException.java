@@ -3,8 +3,15 @@ package org.missao.roxa.missaoroxabackend.core.exception;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
-public class HttpException extends RuntimeException {
+public class HttpException extends RuntimeException implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 8064543674038481849L;
+
     private final int statusCode;
 
     private HttpException(String message, HttpStatus status) {
