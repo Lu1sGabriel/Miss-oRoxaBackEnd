@@ -1,6 +1,9 @@
 package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.find;
 
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.user.shared.mapper.UserMapper;
@@ -12,6 +15,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 @Service
 public class UserFind implements IUserFind {
@@ -24,11 +28,9 @@ public class UserFind implements IUserFind {
     }
 
     @Override
-    public Page<UserResponseDto> allByOrderById(final String order, Pageable pageable) {
-        if (order.equalsIgnoreCase("DESC")) {
-            return mapper.toDtoPage(userRepository.findAllByIdDesc(pageable));
-        }
-        return mapper.toDtoPage(userRepository.findAllByIdAsc(pageable));
+    public Page<UserResponseDto> all(final int page, final int pageSize, final String sortDirection) {
+        Pageable pageable = PageableUtils.createPageable(page, pageSize, "id", sortDirection);
+        return mapper.toDtoPage(userRepository.findAll(pageable));
     }
 
     @Override
@@ -38,6 +40,7 @@ public class UserFind implements IUserFind {
         }
 
         return userRepository.findById(id)
+                .filter(validateUserIsActive())
                 .map(mapper::toDto)
                 .orElseThrow(() -> HttpException.notFound("User not found with the provide ID."));
     }
@@ -48,13 +51,14 @@ public class UserFind implements IUserFind {
             throw HttpException.badRequest("Full name must not be null.");
         }
 
-        return userRepository.findByFullName_FullName(fullName)
+        return userRepository.findByFullName(new FullName(fullName).getValue())
+                .filter(validateUserIsActive())
                 .map(mapper::toDto)
                 .orElseThrow(() -> HttpException.notFound("User not found with the given ID"));
     }
 
     @Override
-    public List<UserResponseDto> getBirthdays(Integer month, Integer day) {
+    public List<UserResponseDto> byBirthdays(Integer month, Integer day) {
         if (day == null && month == null) {
             return mapper.toDtoList(userRepository.findBirthdayOfWeek());
         }
@@ -86,6 +90,17 @@ public class UserFind implements IUserFind {
                     String.format("Invalid day %d for month %d. Max allowed is %d.", day, month, maxDay)
             );
         }
+    }
+
+    private Predicate<UserEntity> validateUserIsActive() {
+        return user -> {
+            if (user.getDateInfo().getDeletedAt() != null) {
+                throw HttpException.badRequest(
+                        "This user is deactivated. Please, contact us if you want to activate it again."
+                );
+            }
+            return true;
+        };
     }
 
 }

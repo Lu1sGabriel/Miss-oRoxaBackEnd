@@ -6,8 +6,6 @@ import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserChang
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserCreateDto;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserResponseDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +29,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserResponseDto>> getAll(@RequestParam(value = "order", required = false, defaultValue = "asc") String order,
-                                                        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                                        @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        var users = useCase.find().allByOrderById(order, pageable);
+    public ResponseEntity<Page<UserResponseDto>> getAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                                        @RequestParam(value = "page-size", required = false, defaultValue = "20") int pageSize,
+                                                        @RequestParam(value = "sort-direction", required = false, defaultValue = "ASC") String sortDirection) {
+        var users = useCase.find().all(page, pageSize, sortDirection);
         return ResponseEntity.ok().body(users);
     }
 
@@ -46,9 +43,9 @@ public class UserController {
     }
 
     @GetMapping(value = "/birthdays")
-    public ResponseEntity<List<UserResponseDto>> getAllBirthday(@RequestParam(value = "month", required = false) Integer month,
-                                                                @RequestParam(value = "day", required = false) Integer day) {
-        var users = useCase.find().getBirthdays(month, day);
+    public ResponseEntity<List<UserResponseDto>> getAllBirthday(@RequestParam(value = "month", required = false) int month,
+                                                                @RequestParam(value = "day", required = false) int day) {
+        var users = useCase.find().byBirthdays(month, day);
         return ResponseEntity.ok().body(users);
     }
 
