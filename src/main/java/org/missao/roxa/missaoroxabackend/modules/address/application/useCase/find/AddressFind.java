@@ -3,6 +3,7 @@ package org.missao.roxa.missaoroxabackend.modules.address.application.useCase.fi
 import io.micrometer.common.util.StringUtils;
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.address.shared.mapper.AddressMapper;
@@ -51,7 +52,7 @@ public class AddressFind implements IAddressFind {
             throw HttpException.badRequest("Postal code cannot be null or blank.");
         }
         Pageable pageable = PageableUtils.createPageable(page, size, "id", sort);
-        return mapper.toDtoPage(addressRepository.findByPostalCode_PostalCode(postalCode.trim(), pageable));
+        return mapper.toDtoPage(addressRepository.findByPostalCode(new PostalCode(postalCode), pageable));
     }
 
     @Override
