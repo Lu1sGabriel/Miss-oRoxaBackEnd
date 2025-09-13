@@ -2,12 +2,15 @@ package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.creat
 
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.factory.AccountFactory;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.factory.AddressFactory;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
 import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
 import org.missao.roxa.missaoroxabackend.modules.municipality.infrastructure.repository.MunicipalityRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.factory.UserFactory;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserCreateDto;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserResponseDto;
@@ -49,13 +52,13 @@ public class UserCreate implements IUserCreate {
     }
 
     private void validateUniqueConstraint(UserCreateDto dto) {
-        if (userRepository.findByFullName_FullName(dto.fullName()).isPresent()) {
+        if (userRepository.findByFullName(new FullName(dto.fullName()).getValue()).isPresent()) {
             throw HttpException.conflict("A user with that name already exists.");
         }
-        if (accountRepository.findByCredentials_Email_Email(dto.account().email()).isPresent()) {
+        if (accountRepository.findByCredentials_Email(new Email(dto.account().email())).isPresent()) {
             throw HttpException.conflict("A user with that email already exists.");
         }
-        if (accountRepository.findByCredentials_PhoneNumber_Number(dto.account().phoneNumber()).isPresent()) {
+        if (accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(dto.account().phoneNumber())).isPresent()) {
             throw HttpException.conflict("A user with that phone number already exists.");
         }
     }
