@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.missao.roxa.missaoroxabackend.core.common.entity.IEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-public class UserEntity implements Serializable, IMappableEntity {
+public class UserEntity implements Serializable, IMappableEntity, IEntity<UserDateInfo> {
 
     @Serial
     private static final long serialVersionUID = 4475953970920573774L;

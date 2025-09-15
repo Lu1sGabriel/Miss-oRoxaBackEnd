@@ -3,12 +3,13 @@ package org.missao.roxa.missaoroxabackend.modules.user.domain.metadata;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import org.missao.roxa.missaoroxabackend.core.common.entity.IEntityDateInfo;
 
 import java.time.Instant;
 
 @Embeddable
 @Getter
-public class UserDateInfo {
+public class UserDateInfo implements IEntityDateInfo {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;

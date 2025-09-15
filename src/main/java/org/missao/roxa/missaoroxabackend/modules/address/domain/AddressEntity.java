@@ -3,6 +3,7 @@ package org.missao.roxa.missaoroxabackend.modules.address.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.missao.roxa.missaoroxabackend.core.common.entity.IEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.metaData.AddressDateInfo;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Table(name = "addresses")
 @NoArgsConstructor
 @Getter
-public class AddressEntity implements Serializable, IMappableEntity {
+public class AddressEntity implements Serializable, IMappableEntity, IEntity<AddressDateInfo> {
 
     @Serial
     private static final long serialVersionUID = -1054928725160826558L;
