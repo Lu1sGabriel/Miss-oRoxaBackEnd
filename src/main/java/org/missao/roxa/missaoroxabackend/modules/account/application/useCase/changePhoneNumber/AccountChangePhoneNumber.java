@@ -1,6 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.changePhoneNumber;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.DataConflictException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
@@ -40,15 +41,13 @@ public class AccountChangePhoneNumber implements IAccountChangePhoneNumber {
                     accountRepository.save(account);
                     return mapper.toDto(account);
                 })
-                .orElseThrow(() -> HttpException.notFound("User not found with the provided ID."));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with the provided ID."));
     }
 
     private Predicate<AccountEntity> validePhoneNumberUniqueConstraint(String phoneNumber) {
         return AccountEntity -> {
             if (accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(phoneNumber)).isPresent()) {
-                throw HttpException.conflict(
-                        "There is already an account associated with this mobile number."
-                );
+                throw new DataConflictException("There is already an account associated with this mobile number.");
             }
             return true;
         };

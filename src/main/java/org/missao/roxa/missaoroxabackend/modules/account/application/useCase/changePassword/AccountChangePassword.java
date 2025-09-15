@@ -1,6 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.changePassword;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountChangePasswordDto;
@@ -31,13 +32,13 @@ public class AccountChangePassword implements IAccountChangePassword {
                     account.getCredentials().checkIfPasswordMatch(dto.currentPassword());
 
                     if (!dto.newPassword().equals(dto.confirmPassword())) {
-                        throw HttpException.badRequest("The confirmation password must match the new password.");
+                        throw new InvalidRequestDataException("The confirmation password must match the new password.");
                     }
 
                     account.getCredentials().changePassword(dto.newPassword());
                     accountRepository.save(account);
                 }, () -> {
-                    throw HttpException.notFound("User not found with the provided id.");
+                    throw new EntityNotFoundException("User not found with the provided id.");
                 });
     }
 

@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 @Embeddable
 @NoArgsConstructor
@@ -20,11 +20,11 @@ public final class Street {
     private static String validate(String street) {
 
         if (street == null || StringUtils.isBlank(street)) {
-            throw HttpException.badRequest("Street cannot be null or empty");
+            throw new InvalidRequestDataException("Street cannot be null or empty");
         }
 
         if (street.length() < 3 || street.length() > 255) {
-            throw HttpException.badRequest("Street must be between 3 and 255 characters");
+            throw new InvalidRequestDataException("Street must be between 3 and 255 characters");
         }
 
         return street.trim();

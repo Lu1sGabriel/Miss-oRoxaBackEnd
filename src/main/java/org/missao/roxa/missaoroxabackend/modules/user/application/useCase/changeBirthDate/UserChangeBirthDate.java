@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.changeBirthDate;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserChangeBirthDateDto;
@@ -31,7 +31,7 @@ public class UserChangeBirthDate implements IUserChangeBirthDate {
                     userRepository.save(user);
                     return mapper.toDto(user);
                 })
-                .orElseThrow(() -> HttpException.notFound("User not found with the provided ID."));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with the provided ID."));
     }
 
 }

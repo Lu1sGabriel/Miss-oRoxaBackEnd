@@ -3,7 +3,7 @@ package org.missao.roxa.missaoroxabackend.modules.user.domain.value;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -24,19 +24,19 @@ public final class BirthDate {
 
     private static LocalDate validate(LocalDate birthDate) {
         if (birthDate == null) {
-            throw HttpException.badRequest("Birth date cannot be null.");
+            throw new InvalidRequestDataException("Birth date cannot be null.");
         }
 
         final LocalDate today = LocalDate.now();
 
         if (birthDate.isAfter(today)) {
-            throw HttpException.badRequest("The date of birth cannot be in the future.");
+            throw new InvalidRequestDataException("The date of birth cannot be in the future.");
         }
 
         final int age = Period.between(birthDate, today).getYears();
 
         if (age < MIN_AGE || age > MAX_AGE) {
-            throw HttpException.badRequest(
+            throw new InvalidRequestDataException(
                     String.format("Age must be between %d and %d years. Provided: %d", MIN_AGE, MAX_AGE, age)
             );
         }

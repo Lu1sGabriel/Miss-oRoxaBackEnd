@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -32,20 +32,20 @@ public final class PhoneNumber {
 
     private static String validate(String number) {
         if (number == null || StringUtils.isBlank(number)) {
-            throw HttpException.badRequest("Phone number cannot be null or empty.");
+            throw new InvalidRequestDataException("Phone number cannot be null or empty.");
         }
 
         if (number.length() != 11) {
-            throw HttpException.badRequest("Brazilian phone number must have exactly 11 digits: DDD (2) + number (9).");
+            throw new InvalidRequestDataException("Brazilian phone number must have exactly 11 digits: DDD (2) + number (9).");
         }
 
         if (!REGEX.matcher(number).matches()) {
-            throw HttpException.badRequest("Phone number must contain only digits.");
+            throw new InvalidRequestDataException("Phone number must contain only digits.");
         }
 
         String ddd = number.substring(0, 2);
         if (!VALID_DDDS.contains(ddd)) {
-            throw HttpException.badRequest("Invalid DDD for Brazil: " + ddd);
+            throw new InvalidRequestDataException("Invalid DDD for Brazil: " + ddd);
         }
 
         return number.trim();

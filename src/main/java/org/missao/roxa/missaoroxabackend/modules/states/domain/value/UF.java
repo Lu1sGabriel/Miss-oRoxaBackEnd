@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -23,11 +23,11 @@ public final class UF {
 
     private static String validate(String uf) {
         if (uf == null || StringUtils.isBlank(uf)) {
-            throw HttpException.badRequest("UF cannot be null or empty");
+            throw new InvalidRequestDataException("UF cannot be null or empty");
         }
 
         if (!REGEX.matcher(uf).matches()) {
-            throw HttpException.badRequest("Invalid UF format. Expected two uppercase letters, e.g., SP");
+            throw new InvalidRequestDataException("Invalid UF format. Expected two uppercase letters, e.g., SP");
         }
 
         return uf.trim();

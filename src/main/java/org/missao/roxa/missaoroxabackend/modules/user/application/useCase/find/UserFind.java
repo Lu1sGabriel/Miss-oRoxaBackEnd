@@ -1,6 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.find;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
@@ -40,7 +41,7 @@ public class UserFind implements IUserFind {
         return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(id))
                 .filter(PredicatesValidator.isEntityActivated())
                 .map(mapper::toDto)
-                .orElseThrow(() -> HttpException.notFound("User not found with the provide ID."));
+                .orElseThrow(() -> new EntityNotFoundException("User not found withe the provided ID"));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class UserFind implements IUserFind {
                         .getValue())
                 .filter(PredicatesValidator.isEntityActivated())
                 .map(mapper::toDto)
-                .orElseThrow(() -> HttpException.notFound("User not found with the given full name"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with the given full name"));
     }
 
     @Override
@@ -76,14 +77,14 @@ public class UserFind implements IUserFind {
 
     private void validateMonth(int month) {
         if (month < 1 || month > 12) {
-            throw HttpException.badRequest("Month must be between 1 and 12.");
+            throw new InvalidRequestDataException("Month must be between 1 and 12.");
         }
     }
 
     private void validateDayOfMonth(int day, int month) {
         int maxDay = YearMonth.of(LocalDate.now().getYear(), month).lengthOfMonth();
         if (day < 1 || day > maxDay) {
-            throw HttpException.badRequest(
+            throw new InvalidRequestDataException(
                     String.format("Invalid day %d for month %d. Max allowed is %d.", day, month, maxDay)
             );
         }

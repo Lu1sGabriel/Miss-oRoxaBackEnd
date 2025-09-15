@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -25,19 +25,19 @@ public final class Municipality {
 
     private static String validate(String name) {
         if (name == null || StringUtils.isBlank(name)) {
-            throw HttpException.badRequest("Municipality name cannot be null or empty");
+            throw new InvalidRequestDataException("Municipality name cannot be null or empty");
         }
 
         String trimmed = name.trim();
 
         if (trimmed.length() < MIN_LENGTH || trimmed.length() > MAX_LENGTH) {
-            throw HttpException.badRequest(
+            throw new InvalidRequestDataException(
                     String.format("Municipality name must be between %d and %d characters", MIN_LENGTH, MAX_LENGTH)
             );
         }
 
         if (!REGEX.matcher(trimmed).matches()) {
-            throw HttpException.badRequest(
+            throw new InvalidRequestDataException(
                     "Municipality name contains invalid characters. Only letters, spaces, apostrophes and hyphens are allowed"
             );
         }

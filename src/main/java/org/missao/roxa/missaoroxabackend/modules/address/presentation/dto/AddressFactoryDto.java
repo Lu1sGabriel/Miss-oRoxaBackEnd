@@ -5,7 +5,7 @@ import org.missao.roxa.missaoroxabackend.modules.municipality.domain.Municipalit
 import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 
-public final class AddressFactoryDto  {
+public final class AddressFactoryDto {
 
     private AddressFactoryDto() {
     }
@@ -17,7 +17,7 @@ public final class AddressFactoryDto  {
                 entity.getId(),
                 entity.getPostalCode().getValue(),
                 entity.getStreet().getValue(),
-                entity.getComplement().getValue(),
+                (entity.getComplement() != null) ? entity.getComplement().getValue() : null,
                 entity.getNeighborhood().getValue(),
                 fromUser(entity.getUser()),
                 fromMunicipality(entity.getMunicipality())

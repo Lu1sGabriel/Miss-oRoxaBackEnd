@@ -5,7 +5,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -23,10 +23,10 @@ public final class UFCode {
 
     private static String validate(String code) {
         if (code == null || StringUtils.isBlank(code)) {
-            throw HttpException.badRequest("UF code cannot be null or empty");
+            throw new InvalidRequestDataException("UF code cannot be null or empty");
         }
         if (!CODE_REGEX.matcher(code).matches()) {
-            throw HttpException.badRequest("Invalid UF code format. Expected two digits, e.g., 35");
+            throw new InvalidRequestDataException("Invalid UF code format. Expected two digits, e.g., 35");
         }
         return code.trim();
     }

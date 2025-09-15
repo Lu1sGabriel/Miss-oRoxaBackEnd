@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 @Embeddable
 @NoArgsConstructor
@@ -19,11 +19,11 @@ public final class Neighborhood {
 
     private static String validate(String neighborhood) {
         if (neighborhood == null || StringUtils.isBlank(neighborhood)) {
-            throw HttpException.badRequest("Neighborhood cannot be null or empty");
+            throw new InvalidRequestDataException("Neighborhood cannot be null or empty");
         }
 
         if (neighborhood.length() < 2 || neighborhood.length() > 100) {
-            throw HttpException.badRequest("Neighborhood must be between 2 and 100 characters");
+            throw new InvalidRequestDataException("Neighborhood must be between 2 and 100 characters");
         }
 
         return neighborhood.trim();

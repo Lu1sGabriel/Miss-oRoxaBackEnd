@@ -1,6 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.create;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.DataConflictException;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.factory.AccountFactory;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
@@ -53,18 +54,18 @@ public class UserCreate implements IUserCreate {
 
     private void validateUniqueConstraint(UserCreateDto dto) {
         if (userRepository.findByFullName(new FullName(dto.fullName()).getValue()).isPresent()) {
-            throw HttpException.conflict("A user with that name already exists.");
+            throw new DataConflictException("A user with that name already exists.");
         }
         if (accountRepository.findByCredentials_Email(new Email(dto.account().email())).isPresent()) {
-            throw HttpException.conflict("A user with that email already exists.");
+            throw new DataConflictException("A user with that email already exists.");
         }
         if (accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(dto.account().phoneNumber())).isPresent()) {
-            throw HttpException.conflict("A user with that phone number already exists.");
+            throw new DataConflictException("A user with that phone number already exists.");
         }
     }
 
     private MunicipalityEntity findMunicipality(UUID id) {
-        return municipalityRepository.findById(id).orElseThrow(() -> HttpException.notFound("Municipality not found with the provide ID"));
+        return municipalityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Municipality not found with the provide ID"));
     }
 
 }

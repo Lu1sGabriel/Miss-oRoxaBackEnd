@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -23,11 +23,11 @@ public final class AuthorityDescription {
 
     private static String validate(String value) {
         if (value == null || StringUtils.isBlank(value)) {
-            throw HttpException.badRequest("Authority description cannot be null or blank.");
+            throw new InvalidRequestDataException("Authority description cannot be null or blank.");
         }
 
         if (!REGEX.matcher(value).matches()) {
-            throw HttpException.badRequest("Invalid authority description.");
+            throw new InvalidRequestDataException("Invalid authority description.");
         }
 
         return value;

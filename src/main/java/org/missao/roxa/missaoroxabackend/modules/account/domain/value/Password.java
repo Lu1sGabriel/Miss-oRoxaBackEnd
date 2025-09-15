@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.password.PasswordHasher;
 
 import java.util.regex.Pattern;
@@ -33,19 +33,19 @@ public final class Password {
 
     private static String validate(String password) {
         if (password == null || StringUtils.isBlank(password)) {
-            throw HttpException.badRequest("Please cannot be null or blank.");
+            throw new InvalidRequestDataException("Password cannot be null or blank.");
         }
 
         if (password.length() < 8) {
-            throw HttpException.badRequest("Password must be at least 8 characters long.");
+            throw new InvalidRequestDataException("Password must be at least 8 characters long.");
         }
 
         if (password.toLowerCase().contains("ç")) {
-            throw HttpException.badRequest("Password cannot contain the character 'ç' or 'Ç'.");
+            throw new InvalidRequestDataException("Password cannot contain the character 'ç' or 'Ç'.");
         }
 
         if (!REGEX.matcher(password).matches()) {
-            throw HttpException.badRequest("Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            throw new InvalidRequestDataException("Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.");
         }
 
         return password;
@@ -61,7 +61,7 @@ public final class Password {
     public void isPasswordMatches(String encodedPassword, String rawPassword) {
         boolean matches = hashUtil.matches(rawPassword, encodedPassword);
         if (!matches) {
-            throw HttpException.badRequest("The current password you entered is incorrect.");
+            throw new InvalidRequestDataException("The current password you entered is incorrect.");
         }
     }
 

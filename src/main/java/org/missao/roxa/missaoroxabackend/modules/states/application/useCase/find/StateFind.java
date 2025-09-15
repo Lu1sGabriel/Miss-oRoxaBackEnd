@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.states.application.useCase.find;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.states.infrastructure.repository.StateRepository;
 import org.missao.roxa.missaoroxabackend.modules.states.presentation.dto.StateResponseDto;
@@ -34,7 +34,7 @@ public class StateFind implements IStateFind {
     public StateResponseDto byState(String stateName) {
         return stateRepository.findByName_NameIgnoreCase(PredicatesValidator.requireSearchParamNotNullAndBlank(stateName))
                 .map(mapper::toDtoWithRelatedEntities)
-                .orElseThrow(() -> HttpException.notFound("State not found with provided state name."));
+                .orElseThrow(() -> new EntityNotFoundException("State not found with provided state name."));
     }
 
 }

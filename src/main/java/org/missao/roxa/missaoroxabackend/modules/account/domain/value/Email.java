@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -27,10 +27,10 @@ public final class Email {
 
     private static String validate(String email) {
         if (email == null || StringUtils.isBlank(email)) {
-            throw HttpException.badRequest("Email cannot be null or empty");
+            throw new InvalidRequestDataException("Email cannot be null or empty");
         }
         if (!REGEX.matcher(email).matches()) {
-            throw HttpException.badRequest("The email address format is invalid.");
+            throw new InvalidRequestDataException("The email address format is invalid.");
         }
         return email.trim();
     }

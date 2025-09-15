@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.find;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
@@ -38,7 +38,7 @@ public class AccountFind implements IAccountFind {
                 ))
                 .filter(PredicatesValidator.isEntityActivated())
                 .map(mapper::toDto)
-                .orElseThrow(() -> HttpException.notFound("Account not found with the provided email."));
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with the provided email."));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class AccountFind implements IAccountFind {
         return accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(phoneNumber))
                 .filter(PredicatesValidator.isEntityActivated())
                 .map(mapper::toDto)
-                .orElseThrow(() -> HttpException.notFound("Account not found with the provided phone number."));
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with the provided phone number."));
     }
 
 }

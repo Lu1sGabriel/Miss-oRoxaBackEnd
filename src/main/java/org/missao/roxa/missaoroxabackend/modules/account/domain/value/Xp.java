@@ -3,7 +3,7 @@ package org.missao.roxa.missaoroxabackend.modules.account.domain.value;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 @Embeddable
 @NoArgsConstructor
@@ -20,15 +20,15 @@ public final class Xp {
 
     private static byte validate(byte xp) {
         if (xp < 0) {
-            throw HttpException.badRequest("Xp cannot be less than zero.");
+            throw new InvalidRequestDataException("Xp cannot be less than zero.");
         }
 
         if (xp % 5 != 0) {
-            throw HttpException.badRequest("Xp must be a divisor of five.");
+            throw new InvalidRequestDataException("Xp must be a divisor of five.");
         }
 
         if (xp > MAX_XP) {
-            throw HttpException.badRequest("Xp cannot be greater than " + MAX_XP + ".");
+            throw new InvalidRequestDataException("Xp cannot be greater than " + MAX_XP + ".");
         }
 
         return xp;

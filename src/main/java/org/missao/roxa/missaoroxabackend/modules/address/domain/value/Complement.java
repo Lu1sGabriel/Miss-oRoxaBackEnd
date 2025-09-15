@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 @Embeddable
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public final class Complement {
 
     private static String validate(String complement) {
         if (complement.length() > 100 || StringUtils.isBlank(complement)) {
-            throw HttpException.badRequest("Complement must be up to 100 characters and must not be empty.");
+            throw new InvalidRequestDataException("Complement must be up to 100 characters and must not be empty.");
         }
 
         return complement.trim();

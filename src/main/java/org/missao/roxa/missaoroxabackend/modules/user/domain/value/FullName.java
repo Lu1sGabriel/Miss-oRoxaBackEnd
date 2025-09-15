@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -23,11 +23,11 @@ public final class FullName {
 
     private static String validate(String value) {
         if (value == null || StringUtils.isBlank(value)) {
-            throw HttpException.badRequest("Full name cannot be null or blank.");
+            throw new InvalidRequestDataException("Full name cannot be null or blank.");
         }
 
         if (!REGEX.matcher(value).matches()) {
-            throw HttpException.badRequest("Invalid full name.");
+            throw new InvalidRequestDataException("Invalid full name.");
         }
 
         return value.strip();

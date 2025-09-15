@@ -3,7 +3,7 @@ package org.missao.roxa.missaoroxabackend.modules.account.domain.value;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 @Embeddable
 @NoArgsConstructor
@@ -20,10 +20,10 @@ public final class Level {
 
     private static byte validate(int level) {
         if (level < 0) {
-            throw HttpException.badRequest("Level cannot be less than zero");
+            throw new InvalidRequestDataException("Level cannot be less than zero");
         }
         if (level > MAX_LEVEL) {
-            throw HttpException.badRequest("Level cannot be greater than " + MAX_LEVEL);
+            throw new InvalidRequestDataException("Level cannot be greater than " + MAX_LEVEL);
         }
         return (byte) level;
     }

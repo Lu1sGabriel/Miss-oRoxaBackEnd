@@ -70,20 +70,23 @@ public class AddressEntity implements Serializable, IMappableEntity, IEntity<Add
         this.dateInfo = new AddressDateInfo();
     }
 
-    public void changePostalCode(PostalCode postalCode) {
-        this.postalCode = postalCode;
+    public void changePostalCode(String postalCode) {
+        this.postalCode = new PostalCode(postalCode);
     }
 
-    public void changeStreet(Street street) {
-        this.street = street;
+    public void changeStreet(String street) {
+        this.street = new Street(street);
     }
 
-    public void changeComplement(Complement complement) {
-        this.complement = complement;
+    public void changeComplement(String complement) {
+        if (complement == null) {
+            this.complement = null;
+        }
+        this.complement = new Complement(complement);
     }
 
-    public void changeNeighborhood(Neighborhood neighborhood) {
-        this.neighborhood = neighborhood;
+    public void changeNeighborhood(String neighborhood) {
+        this.neighborhood = new Neighborhood(neighborhood);
     }
 
     @Override

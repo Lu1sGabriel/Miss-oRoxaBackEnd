@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -23,11 +23,11 @@ public final class State {
 
     private static String validate(String state) {
         if (state == null || StringUtils.isBlank(state)) {
-            throw HttpException.badRequest("State name cannot be null or empty");
+            throw new InvalidRequestDataException("State name cannot be null or empty");
         }
 
         if (!REGEX.matcher(state).matches()) {
-            throw HttpException.badRequest("Invalid state name format. Expected two uppercase letters, e.g., SP");
+            throw new InvalidRequestDataException("Invalid state name format. Expected two uppercase letters, e.g., SP");
         }
 
         return state.trim();

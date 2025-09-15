@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.address.application.useCase.find;
 
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import jakarta.persistence.EntityNotFoundException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
@@ -41,7 +41,7 @@ public class AddressFind implements IAddressFind {
         return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(userId))
                 .map(UserEntity::getAddress)
                 .map(mapper::toDto)
-                .orElseThrow(() -> HttpException.notFound("User not found with the provided ID."));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with the provided ID."));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class AddressFind implements IAddressFind {
                     var addresses = addressRepository.findByMunicipality(municipality, pageable);
                     return mapper.toDtoPage(addresses);
                 })
-                .orElseThrow(() -> HttpException.notFound("Municipality not found with the provided ID"));
+                .orElseThrow(() -> new EntityNotFoundException("Municipality not found with the provided ID"));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AddressFind implements IAddressFind {
                     var addresses = addressRepository.findByMunicipality_State(state, pageable);
                     return mapper.toDtoPage(addresses);
                 })
-                .orElseThrow(() -> HttpException.notFound("State not found with the name."));
+                .orElseThrow(() -> new EntityNotFoundException("State not found with the name."));
     }
 
 }

@@ -4,7 +4,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 
 import java.util.regex.Pattern;
 
@@ -23,11 +23,11 @@ public final class PostalCode {
 
     private static String validate(String postalCode) {
         if (postalCode == null || StringUtils.isBlank(postalCode)) {
-            throw HttpException.badRequest("Postal code cannot be null or empty");
+            throw new InvalidRequestDataException("Postal code cannot be null or empty");
         }
 
         if (!REGEX.matcher(postalCode).matches()) {
-            throw HttpException.badRequest("Invalid postal code format. Expected: 8 digits, only numbers (e.g., 12345678)");
+            throw new InvalidRequestDataException("Invalid postal code format. Expected: 8 digits, only numbers (e.g., 12345678)");
         }
 
         return postalCode.trim();
