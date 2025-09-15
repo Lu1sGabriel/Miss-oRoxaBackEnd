@@ -1,8 +1,8 @@
 package org.missao.roxa.missaoroxabackend.modules.address.application.useCase.find;
 
-import io.micrometer.common.util.StringUtils;
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
@@ -14,6 +14,7 @@ import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -25,8 +26,8 @@ public class AddressFind implements IAddressFind {
     private final UserRepository userRepository;
     private final AddressMapper mapper;
 
-    public AddressFind(AddressRepository addressRepository, MunicipalityRepository municipalityRepository, StateRepository stateRepository,
-                       UserRepository userRepository, AddressMapper mapper) {
+    public AddressFind(AddressRepository addressRepository, MunicipalityRepository municipalityRepository,
+                       StateRepository stateRepository, UserRepository userRepository, AddressMapper mapper) {
         this.addressRepository = addressRepository;
         this.municipalityRepository = municipalityRepository;
         this.stateRepository = stateRepository;
@@ -35,33 +36,27 @@ public class AddressFind implements IAddressFind {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AddressResponseDto byUser(UUID userId) {
-        if (userId == null) {
-            throw HttpException.badRequest("User id cannot be null.");
-        }
-
-        return userRepository.findById(userId)
+        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(userId))
                 .map(UserEntity::getAddress)
                 .map(mapper::toDto)
                 .orElseThrow(() -> HttpException.notFound("User not found with the provided ID."));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AddressResponseDto> byPostalCode(String postalCode, int page, int size, String sort) {
-        if (postalCode == null || StringUtils.isBlank(postalCode)) {
-            throw HttpException.badRequest("Postal code cannot be null or blank.");
-        }
         Pageable pageable = PageableUtils.createPageable(page, size, "id", sort);
-        return mapper.toDtoPage(addressRepository.findByPostalCode(new PostalCode(postalCode), pageable));
+        return mapper.toDtoPage(addressRepository.findByPostalCode(new PostalCode(
+                PredicatesValidator.requireSearchParamNotNullAndBlank(postalCode)
+        ), pageable));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AddressResponseDto> byMunicipality(UUID municipalityId, int page, int size, String sort) {
-        if (municipalityId == null) {
-            throw HttpException.badRequest("Municipality ID cannot be null or blank.");
-        }
-
-        return municipalityRepository.findById(municipalityId)
+        return municipalityRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(municipalityId))
                 .map(municipality -> {
                     Pageable pageable = PageableUtils.createPageable(page, size, "postalCode", sort);
                     var addresses = addressRepository.findByMunicipality(municipality, pageable);
@@ -71,12 +66,9 @@ public class AddressFind implements IAddressFind {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AddressResponseDto> byState(String stateName, int page, int size, String sort) {
-        if (stateName == null || StringUtils.isBlank(stateName)) {
-            throw HttpException.badRequest("State fullName cannot be null or blank.");
-        }
-
-        return stateRepository.findByName_NameIgnoreCase(stateName.trim())
+        return stateRepository.findByName_NameIgnoreCase(PredicatesValidator.requireSearchParamNotNullAndBlank(stateName))
                 .map(state -> {
                     Pageable pageable = PageableUtils.createPageable(page, size, "municipality.name", sort);
                     var addresses = addressRepository.findByMunicipality_State(state, pageable);

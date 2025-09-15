@@ -1,6 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.changePhoneNumber;
 
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
@@ -30,12 +31,8 @@ public class AccountChangePhoneNumber implements IAccountChangePhoneNumber {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AccountResponseDto change(UUID userId, AccountChangePhoneNumberDto dto) {
-        if (userId == null) {
-            throw HttpException.badRequest("User ID cannot be null.");
-        }
-
-        return userRepository.findById(userId)
-                .filter(validateUserIsActive())
+        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(userId))
+                .filter(PredicatesValidator.isEntityActivated())
                 .map(UserEntity::getAccount)
                 .filter(validePhoneNumberUniqueConstraint(dto.phoneNumber()))
                 .map(account -> {
@@ -44,17 +41,6 @@ public class AccountChangePhoneNumber implements IAccountChangePhoneNumber {
                     return mapper.toDto(account);
                 })
                 .orElseThrow(() -> HttpException.notFound("User not found with the provided ID."));
-    }
-
-    private Predicate<UserEntity> validateUserIsActive() {
-        return user -> {
-            if (user.getDateInfo().getDeletedAt() != null) {
-                throw HttpException.badRequest(
-                        "This user is deactivated. Please, contact us if you want to activate it again."
-                );
-            }
-            return true;
-        };
     }
 
     private Predicate<AccountEntity> validePhoneNumberUniqueConstraint(String phoneNumber) {

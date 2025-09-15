@@ -1,6 +1,8 @@
 package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.changeFullName;
 
+import jakarta.transaction.Transactional;
 import org.missao.roxa.missaoroxabackend.core.exception.HttpException;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
@@ -23,13 +25,14 @@ public class UserChangeFullName implements IUserChangeFullName {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public UserResponseDto change(final UUID id, final UserChangeFullNameDto dto) {
         if (id == null) {
             throw HttpException.badRequest("The provided ID cannot be null.");
         }
 
-        return userRepository.findById(id)
-                .filter(validateUserIsActive())
+        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(id))
+                .filter(PredicatesValidator.isEntityActivated())
                 .filter(validateUniqueFullName(dto))
                 .map(user -> {
                     user.changeFullName(dto.fullName());
@@ -43,17 +46,6 @@ public class UserChangeFullName implements IUserChangeFullName {
         return user -> {
             if (userRepository.findByFullName(new FullName(dto.fullName()).getValue()).isPresent()) {
                 throw HttpException.conflict("An user with that full name already exists.");
-            }
-            return true;
-        };
-    }
-
-    private Predicate<UserEntity> validateUserIsActive() {
-        return user -> {
-            if (user.getDateInfo().getDeletedAt() != null) {
-                throw HttpException.badRequest(
-                        "This user is deactivated. Please, contact us if you want to activate it again."
-                );
             }
             return true;
         };
