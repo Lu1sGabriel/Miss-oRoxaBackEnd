@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.authority.infrastructure.initializer;
 
 import lombok.RequiredArgsConstructor;
-import org.missao.roxa.missaoroxabackend.modules.authority.domain.AuthorityEntity;
+import org.missao.roxa.missaoroxabackend.modules.authority.domain.entity.AuthorityEntity;
 import org.missao.roxa.missaoroxabackend.modules.authority.infrastructure.repository.AuthorityRepository;
 import org.missao.roxa.missaoroxabackend.modules.authority.shared.utils.AuthorityUtils;
 import org.springframework.boot.SpringApplication;

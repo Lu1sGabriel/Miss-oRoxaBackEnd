@@ -1,9 +1,9 @@
 package org.missao.roxa.missaoroxabackend.modules.address.presentation.dto;
 
-import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
-import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.entity.AddressEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.states.domain.entity.StateEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 
 public final class AddressFactoryDto {
 

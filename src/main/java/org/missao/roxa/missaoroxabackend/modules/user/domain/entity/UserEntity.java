@@ -1,14 +1,14 @@
-package org.missao.roxa.missaoroxabackend.modules.user.domain;
+package org.missao.roxa.missaoroxabackend.modules.user.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.missao.roxa.missaoroxabackend.core.common.entity.IEntity;
+import org.missao.roxa.missaoroxabackend.core.common.entity.domain.IEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
-import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
-import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
-import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.UUIDV7;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.entity.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.entity.AddressEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.metadata.UserDateInfo;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.BirthDate;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
@@ -23,13 +23,13 @@ import java.util.UUID;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-public class UserEntity implements Serializable, IMappableEntity, IEntity<UserDateInfo> {
+public class UserEntity implements Serializable, IMappableEntity, IEntity {
 
     @Serial
     private static final long serialVersionUID = 4475953970920573774L;
 
     @Id
-    @GeneratedUuidV7
+    @UUIDV7
     private UUID id;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,12 +59,10 @@ public class UserEntity implements Serializable, IMappableEntity, IEntity<UserDa
 
     public void changeFullName(String fullName) {
         this.fullName = new FullName(fullName);
-        getDateInfo().update();
     }
 
     public void changeBirthDate(LocalDate birthDate) {
         this.birthDate = new BirthDate(birthDate);
-        getDateInfo().update();
     }
 
     @Override

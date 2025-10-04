@@ -8,7 +8,7 @@ import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumbe
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.factory.AddressFactory;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
 import org.missao.roxa.missaoroxabackend.modules.municipality.infrastructure.repository.MunicipalityRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.factory.UserFactory;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
@@ -53,7 +53,7 @@ public class UserCreate implements IUserCreate {
     }
 
     private void validateUniqueConstraint(UserCreateDto dto) {
-        if (userRepository.findByFullName(new FullName(dto.fullName()).getValue()).isPresent()) {
+        if (userRepository.findByName(new FullName(dto.fullName()).getValue()).isPresent()) {
             throw new DataConflictException("A user with that name already exists.");
         }
         if (accountRepository.findByCredentials_Email(new Email(dto.account().email())).isPresent()) {

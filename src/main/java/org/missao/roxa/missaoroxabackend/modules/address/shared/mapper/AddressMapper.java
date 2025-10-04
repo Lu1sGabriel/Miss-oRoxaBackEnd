@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.address.shared.mapper;
 
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMapper;
-import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.entity.AddressEntity;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressFactoryDto;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
 import org.springframework.data.domain.Page;

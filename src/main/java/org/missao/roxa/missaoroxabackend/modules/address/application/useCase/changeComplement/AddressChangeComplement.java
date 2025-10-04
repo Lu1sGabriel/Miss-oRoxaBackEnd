@@ -1,35 +1,31 @@
 package org.missao.roxa.missaoroxabackend.modules.address.application.useCase.changeComplement;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
+import lombok.RequiredArgsConstructor;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.Validator;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressChangeComplementDto;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.address.shared.mapper.AddressMapper;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AddressChangeComplement implements IAddressChangeComplement {
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
     private final AddressMapper mapper;
 
-    public AddressChangeComplement(AddressRepository addressRepository, UserRepository userRepository, AddressMapper mapper) {
-        this.addressRepository = addressRepository;
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-    }
-
     @Override
     public AddressResponseDto change(UUID userId, AddressChangeComplementDto dto) {
-        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(userId))
-                .filter(PredicatesValidator.isEntityActivated())
+        return userRepository.findById(Validator.requireNonEmpty(userId))
+                .map(Validator::requireEntityActivated)
                 .map(UserEntity::getAddress)
-                .filter(PredicatesValidator.isEntityActivated())
+                .map(Validator::requireEntityActivated)
                 .map(address -> {
                     address.changeComplement(dto.complement());
                     address.getDateInfo().update();

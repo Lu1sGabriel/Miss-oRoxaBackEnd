@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.municipality.infrastructure.repository;
 
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

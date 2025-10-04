@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.authority.infrastructure.repository;
 
-import org.missao.roxa.missaoroxabackend.modules.authority.domain.AuthorityEntity;
+import org.missao.roxa.missaoroxabackend.modules.authority.domain.entity.AuthorityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

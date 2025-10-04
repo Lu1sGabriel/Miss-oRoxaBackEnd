@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository;
 
-import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.entity.AccountEntity;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
 import org.springframework.data.domain.Page;

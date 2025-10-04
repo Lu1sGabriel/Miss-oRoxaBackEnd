@@ -2,7 +2,7 @@ package org.missao.roxa.missaoroxabackend.modules.user.presentation.dto;
 
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountFactoryDto;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressFactoryDto;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 
 public final class UserFactoryDto {
 

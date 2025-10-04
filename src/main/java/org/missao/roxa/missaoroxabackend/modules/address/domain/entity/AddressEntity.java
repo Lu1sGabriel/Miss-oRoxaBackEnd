@@ -1,18 +1,18 @@
-package org.missao.roxa.missaoroxabackend.modules.address.domain;
+package org.missao.roxa.missaoroxabackend.modules.address.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.common.entity.IEntity;
+import org.missao.roxa.missaoroxabackend.core.common.entity.domain.IEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
-import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.UUIDV7;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.metaData.AddressDateInfo;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.Complement;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.Neighborhood;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.Street;
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,13 +23,13 @@ import java.util.UUID;
 @Table(name = "addresses")
 @NoArgsConstructor
 @Getter
-public class AddressEntity implements Serializable, IMappableEntity, IEntity<AddressDateInfo> {
+public class AddressEntity implements Serializable, IMappableEntity, IEntity {
 
     @Serial
     private static final long serialVersionUID = -1054928725160826558L;
 
     @Id
-    @GeneratedUuidV7
+    @UUIDV7
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)

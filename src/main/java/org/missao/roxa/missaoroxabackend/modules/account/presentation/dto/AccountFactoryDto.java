@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.account.presentation.dto;
 
-import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.entity.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 
 public final class AccountFactoryDto {
 

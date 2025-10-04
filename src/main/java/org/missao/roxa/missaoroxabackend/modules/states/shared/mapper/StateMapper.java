@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.states.shared.mapper;
 
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMapper;
-import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
+import org.missao.roxa.missaoroxabackend.modules.states.domain.entity.StateEntity;
 import org.missao.roxa.missaoroxabackend.modules.states.presentation.dto.StateFactoryDto;
 import org.missao.roxa.missaoroxabackend.modules.states.presentation.dto.StateResponseDto;
 import org.springframework.data.domain.Page;

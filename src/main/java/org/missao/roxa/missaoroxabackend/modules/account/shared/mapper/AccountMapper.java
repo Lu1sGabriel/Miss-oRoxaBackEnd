@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.account.shared.mapper;
 
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMapper;
-import org.missao.roxa.missaoroxabackend.modules.account.domain.AccountEntity;
+import org.missao.roxa.missaoroxabackend.modules.account.domain.entity.AccountEntity;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountFactoryDto;
 import org.missao.roxa.missaoroxabackend.modules.account.presentation.dto.AccountResponseDto;
 import org.springframework.data.domain.Page;

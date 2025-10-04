@@ -2,14 +2,14 @@ package org.missao.roxa.missaoroxabackend.modules.address.application.useCase.fi
 
 import jakarta.persistence.EntityNotFoundException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
-import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.Validator;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.address.shared.mapper.AddressMapper;
 import org.missao.roxa.missaoroxabackend.modules.municipality.infrastructure.repository.MunicipalityRepository;
 import org.missao.roxa.missaoroxabackend.modules.states.infrastructure.repository.StateRepository;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +38,7 @@ public class AddressFind implements IAddressFind {
     @Override
     @Transactional(readOnly = true)
     public AddressResponseDto byUser(UUID userId) {
-        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(userId))
+        return userRepository.findById(Validator.requireNonEmpty(userId))
                 .map(UserEntity::getAddress)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with the provided ID."));
@@ -49,14 +49,14 @@ public class AddressFind implements IAddressFind {
     public Page<AddressResponseDto> byPostalCode(String postalCode, int page, int size, String sort) {
         Pageable pageable = PageableUtils.createPageable(page, size, "id", sort);
         return mapper.toDtoPage(addressRepository.findByPostalCode(new PostalCode(
-                PredicatesValidator.requireSearchParamNotNullAndBlank(postalCode)
+                Validator.requireNonEmpty(postalCode)
         ), pageable));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<AddressResponseDto> byMunicipality(UUID municipalityId, int page, int size, String sort) {
-        return municipalityRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(municipalityId))
+        return municipalityRepository.findById(Validator.requireNonEmpty(municipalityId))
                 .map(municipality -> {
                     Pageable pageable = PageableUtils.createPageable(page, size, "postalCode", sort);
                     var addresses = addressRepository.findByMunicipality(municipality, pageable);
@@ -68,7 +68,7 @@ public class AddressFind implements IAddressFind {
     @Override
     @Transactional(readOnly = true)
     public Page<AddressResponseDto> byState(String stateName, int page, int size, String sort) {
-        return stateRepository.findByName_NameIgnoreCase(PredicatesValidator.requireSearchParamNotNullAndBlank(stateName))
+        return stateRepository.findByName(Validator.requireNonEmpty(stateName))
                 .map(state -> {
                     Pageable pageable = PageableUtils.createPageable(page, size, "municipality.name", sort);
                     var addresses = addressRepository.findByMunicipality_State(state, pageable);

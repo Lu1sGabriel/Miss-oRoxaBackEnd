@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserResponseDto> getById(@PathVariable(value = "id") UUID id) {
-        var user = useCase.find().byId(id);
+        var user = useCase.getFind().byId(id);
         return ResponseEntity.ok().body(user);
     }
 
@@ -32,20 +32,20 @@ public class UserController {
     public ResponseEntity<Page<UserResponseDto>> getAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                                         @RequestParam(value = "page-size", required = false, defaultValue = "20") int pageSize,
                                                         @RequestParam(value = "sort-direction", required = false, defaultValue = "ASC") String sortDirection) {
-        var users = useCase.find().all(page, pageSize, sortDirection);
+        var users = useCase.getFind().all(page, pageSize, sortDirection);
         return ResponseEntity.ok().body(users);
     }
 
     @GetMapping(value = "/name/{full-name}")
     public ResponseEntity<UserResponseDto> getByFullName(@PathVariable(value = "full-name") String fullName) {
-        var user = useCase.find().byFullName(fullName);
+        var user = useCase.getFind().byFullName(fullName);
         return ResponseEntity.ok().body(user);
     }
 
     @GetMapping(value = "/birthdays")
     public ResponseEntity<List<UserResponseDto>> getAllBirthday(@RequestParam(value = "month", required = false) int month,
                                                                 @RequestParam(value = "day", required = false) int day) {
-        var users = useCase.find().byBirthdays(month, day);
+        var users = useCase.getFind().byBirthdays(month, day);
         return ResponseEntity.ok().body(users);
     }
 
@@ -58,14 +58,14 @@ public class UserController {
     @PatchMapping(value = "/change-full-name/{id}")
     public ResponseEntity<UserResponseDto> changeFullName(@PathVariable(value = "id") UUID id,
                                                           @RequestBody UserChangeFullNameDto dto) {
-        var user = useCase.changeFullName().change(id, dto);
+        var user = useCase.getChangeFullName().change(id, dto);
         return ResponseEntity.ok().body(user);
     }
 
     @PatchMapping(value = "/change-birthdate/{id}")
     public ResponseEntity<UserResponseDto> changeBirthDate(@PathVariable(value = "id") UUID id,
                                                            @RequestBody UserChangeBirthDateDto dto) {
-        var user = useCase.changeBirthDate().change(id, dto);
+        var user = useCase.getChangeBirthDate().change(id, dto);
         return ResponseEntity.ok().body(user);
     }
 

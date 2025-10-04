@@ -1,12 +1,12 @@
 package org.missao.roxa.missaoroxabackend.modules.address.application.useCase.changeNeighbordhood;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.Validator;
 import org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository.AddressRepository;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressChangeNeighborhoodDto;
 import org.missao.roxa.missaoroxabackend.modules.address.presentation.dto.AddressResponseDto;
 import org.missao.roxa.missaoroxabackend.modules.address.shared.mapper.AddressMapper;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +26,10 @@ public class AddressChangeNeighborhood implements IAddressChangeNeighborhood {
 
     @Override
     public AddressResponseDto change(UUID userId, AddressChangeNeighborhoodDto dto) {
-        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(userId))
-                .filter(PredicatesValidator.isEntityActivated())
+        return userRepository.findById(Validator.requireNonEmpty(userId))
+                .filter(Validator.requireEntityActivated().asPredicate())
                 .map(UserEntity::getAddress)
-                .filter(PredicatesValidator.isEntityActivated())
+                .filter(Validator.requireEntityActivated().asPredicate())
                 .map(address -> {
                     address.changeNeighborhood(dto.neighborhood());
                     address.getDateInfo().update();

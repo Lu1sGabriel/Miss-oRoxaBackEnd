@@ -21,16 +21,18 @@ public final class FullName {
         this.fullName = validate(fullName);
     }
 
-    private static String validate(String value) {
-        if (value == null || StringUtils.isBlank(value)) {
+    private static String validate(String fullName) {
+        if (fullName == null || StringUtils.isBlank(fullName)) {
             throw new InvalidRequestDataException("Full name cannot be null or blank.");
         }
 
-        if (!REGEX.matcher(value).matches()) {
+        var trimmed = fullName.trim();
+
+        if (!REGEX.matcher(trimmed).matches()) {
             throw new InvalidRequestDataException("Invalid full name.");
         }
 
-        return value.strip();
+        return trimmed;
     }
 
     public String getValue() {

@@ -1,7 +1,7 @@
 package org.missao.roxa.missaoroxabackend.modules.states.presentation.dto;
 
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
-import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.states.domain.entity.StateEntity;
 
 import java.text.Collator;
 import java.util.*;

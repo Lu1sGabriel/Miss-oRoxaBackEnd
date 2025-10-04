@@ -1,8 +1,9 @@
 package org.missao.roxa.missaoroxabackend.modules.account.application.useCase.find;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
+import lombok.RequiredArgsConstructor;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.Validator;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.Email;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.value.PhoneNumber;
 import org.missao.roxa.missaoroxabackend.modules.account.infrastructure.repository.AccountRepository;
@@ -14,14 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class AccountFind implements IAccountFind {
     private final AccountRepository accountRepository;
     private final AccountMapper mapper;
-
-    public AccountFind(AccountRepository accountRepository, AccountMapper mapper) {
-        this.accountRepository = accountRepository;
-        this.mapper = mapper;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -33,10 +30,8 @@ public class AccountFind implements IAccountFind {
     @Override
     @Transactional(readOnly = true)
     public AccountResponseDto byEmail(final String email) {
-        return accountRepository.findByCredentials_Email(new Email(
-                        PredicatesValidator.requireSearchParamNotNullAndBlank(email)
-                ))
-                .filter(PredicatesValidator.isEntityActivated())
+        return accountRepository.findByCredentials_Email(new Email(Validator.requireNonEmpty(email)))
+                .map(Validator::requireEntityActivated)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found with the provided email."));
     }
@@ -44,8 +39,8 @@ public class AccountFind implements IAccountFind {
     @Override
     @Transactional(readOnly = true)
     public AccountResponseDto byPhoneNumber(String phoneNumber) {
-        return accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(phoneNumber))
-                .filter(PredicatesValidator.isEntityActivated())
+        return accountRepository.findByCredentials_PhoneNumber(new PhoneNumber(Validator.requireNonEmpty(phoneNumber)))
+                .map(Validator::requireEntityActivated)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found with the provided phone number."));
     }

@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.states.infrastructure.repository;
 
-import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
+import org.missao.roxa.missaoroxabackend.modules.states.domain.entity.StateEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,6 +15,6 @@ public interface StateRepository extends JpaRepository<StateEntity, UUID> {
 
     @Query(value = "SELECT * FROM states WHERE unaccent(LOWER(name)) = unaccent(LOWER(:name))",
             nativeQuery = true)
-    Optional<StateEntity> findByName_NameIgnoreCase(String name);
+    Optional<StateEntity> findByName(String name);
 
 }

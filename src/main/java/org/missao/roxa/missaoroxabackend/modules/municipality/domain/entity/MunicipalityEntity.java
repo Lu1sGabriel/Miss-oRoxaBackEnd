@@ -1,12 +1,12 @@
-package org.missao.roxa.missaoroxabackend.modules.municipality.domain;
+package org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
-import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.value.Municipality;
-import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.entity.AddressEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.value.MunicipalityName;
+import org.missao.roxa.missaoroxabackend.modules.states.domain.entity.StateEntity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class MunicipalityEntity implements Serializable, IMappableEntity {
     private UUID id;
 
     @AttributeOverride(name = "name", column = @Column(name = "name", nullable = false))
-    private Municipality name;
+    private MunicipalityName name;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "state_id", nullable = false)

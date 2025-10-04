@@ -1,10 +1,10 @@
-package org.missao.roxa.missaoroxabackend.modules.states.domain;
+package org.missao.roxa.missaoroxabackend.modules.states.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
 import org.missao.roxa.missaoroxabackend.modules.states.domain.value.State;
 import org.missao.roxa.missaoroxabackend.modules.states.domain.value.UF;
 import org.missao.roxa.missaoroxabackend.modules.states.domain.value.UFCode;

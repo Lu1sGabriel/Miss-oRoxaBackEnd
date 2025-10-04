@@ -1,11 +1,12 @@
-package org.missao.roxa.missaoroxabackend.modules.authority.domain;
+package org.missao.roxa.missaoroxabackend.modules.authority.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
-import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.UUIDV7;
 import org.missao.roxa.missaoroxabackend.modules.authority.domain.enums.IAuthority;
+import org.missao.roxa.missaoroxabackend.modules.authority.domain.metadata.AuthorityDateInfo;
 import org.missao.roxa.missaoroxabackend.modules.authority.domain.value.AuthorityDescription;
 import org.missao.roxa.missaoroxabackend.modules.authority.domain.value.AuthorityName;
 
@@ -24,7 +25,7 @@ public class AuthorityEntity implements Serializable {
     private static final long serialVersionUID = 235567809685984419L;
 
     @Id
-    @GeneratedUuidV7
+    @UUIDV7
     private UUID id;
 
     @Embedded
@@ -36,9 +37,13 @@ public class AuthorityEntity implements Serializable {
     @AttributeOverride(name = "description", column = @Column(name = "description", nullable = false))
     private AuthorityDescription description;
 
+    @Embedded
+    private AuthorityDateInfo dateInfo;
+
     public AuthorityEntity(IAuthority authority) {
         this.name = new AuthorityName(authority.getName());
         this.description = new AuthorityDescription(authority.getDescription());
+        this.dateInfo = new AuthorityDateInfo();
     }
 
     @Override

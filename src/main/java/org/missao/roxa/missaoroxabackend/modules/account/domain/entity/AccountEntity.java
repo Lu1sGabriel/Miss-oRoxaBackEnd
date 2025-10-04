@@ -1,15 +1,15 @@
-package org.missao.roxa.missaoroxabackend.modules.account.domain;
+package org.missao.roxa.missaoroxabackend.modules.account.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.missao.roxa.missaoroxabackend.core.common.entity.IEntity;
+import org.missao.roxa.missaoroxabackend.core.common.entity.domain.IEntity;
 import org.missao.roxa.missaoroxabackend.core.shared.helper.mapper.IMappableEntity;
-import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.GeneratedUuidV7;
+import org.missao.roxa.missaoroxabackend.core.shared.helper.uuid.UUIDV7;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.AccountCredentials;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.AccountDateInfo;
 import org.missao.roxa.missaoroxabackend.modules.account.domain.metadata.AccountGamification;
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,13 +20,13 @@ import java.util.UUID;
 @Table(name = "accounts")
 @NoArgsConstructor
 @Getter
-public class AccountEntity implements Serializable, IMappableEntity, IEntity<AccountDateInfo> {
+public class AccountEntity implements Serializable, IMappableEntity, IEntity {
 
     @Serial
     private static final long serialVersionUID = -2773921389709128763L;
 
     @Id
-    @GeneratedUuidV7
+    @UUIDV7
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)

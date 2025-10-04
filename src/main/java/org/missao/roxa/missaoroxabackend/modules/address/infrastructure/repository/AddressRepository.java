@@ -1,9 +1,9 @@
 package org.missao.roxa.missaoroxabackend.modules.address.infrastructure.repository;
 
-import org.missao.roxa.missaoroxabackend.modules.address.domain.AddressEntity;
+import org.missao.roxa.missaoroxabackend.modules.address.domain.entity.AddressEntity;
 import org.missao.roxa.missaoroxabackend.modules.address.domain.value.PostalCode;
-import org.missao.roxa.missaoroxabackend.modules.municipality.domain.MunicipalityEntity;
-import org.missao.roxa.missaoroxabackend.modules.states.domain.StateEntity;
+import org.missao.roxa.missaoroxabackend.modules.municipality.domain.entity.MunicipalityEntity;
+import org.missao.roxa.missaoroxabackend.modules.states.domain.entity.StateEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,9 +1,10 @@
 package org.missao.roxa.missaoroxabackend.modules.user.application.useCase.find;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.missao.roxa.missaoroxabackend.core.exception.types.InvalidRequestDataException;
 import org.missao.roxa.missaoroxabackend.core.shared.utils.PageableUtils;
-import org.missao.roxa.missaoroxabackend.core.shared.utils.PredicatesValidator;
+import org.missao.roxa.missaoroxabackend.core.shared.utils.Validator;
 import org.missao.roxa.missaoroxabackend.modules.user.domain.value.FullName;
 import org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository.UserRepository;
 import org.missao.roxa.missaoroxabackend.modules.user.presentation.dto.UserResponseDto;
@@ -19,14 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserFind implements IUserFind {
     private final UserRepository userRepository;
     private final UserMapper mapper;
-
-    public UserFind(UserRepository userRepository, UserMapper mapper) {
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -38,18 +35,18 @@ public class UserFind implements IUserFind {
     @Override
     @Transactional(readOnly = true)
     public UserResponseDto byId(final UUID id) {
-        return userRepository.findById(PredicatesValidator.requireSearchParamNotNullAndBlank(id))
-                .filter(PredicatesValidator.isEntityActivated())
+        return userRepository.findById(Validator.requireNonEmpty(id))
+                .map(Validator::requireEntityActivated)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("User not found withe the provided ID"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with the provided ID"));
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponseDto byFullName(final String fullName) {
-        return userRepository.findByFullName(new FullName(PredicatesValidator.requireSearchParamNotNullAndBlank(fullName))
+        return userRepository.findByName(new FullName(Validator.requireNonEmpty(fullName))
                         .getValue())
-                .filter(PredicatesValidator.isEntityActivated())
+                .map(Validator::requireEntityActivated)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with the given full name"));
     }

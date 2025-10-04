@@ -3,7 +3,9 @@ package org.missao.roxa.missaoroxabackend.modules.account.domain.metadata;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
-import org.missao.roxa.missaoroxabackend.core.common.entity.IEntityDateInfo;
+import org.missao.roxa.missaoroxabackend.core.common.entity.metadata.IEntityDateInfo;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
 
@@ -11,6 +13,11 @@ import java.time.Instant;
 @Getter
 public class AccountDateInfo implements IEntityDateInfo {
 
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
@@ -18,6 +25,7 @@ public class AccountDateInfo implements IEntityDateInfo {
     private Instant deletedAt;
 
     public AccountDateInfo() {
+        this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 

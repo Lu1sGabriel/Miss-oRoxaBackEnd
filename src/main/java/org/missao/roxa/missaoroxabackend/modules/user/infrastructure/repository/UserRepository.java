@@ -1,6 +1,6 @@
 package org.missao.roxa.missaoroxabackend.modules.user.infrastructure.repository;
 
-import org.missao.roxa.missaoroxabackend.modules.user.domain.UserEntity;
+import org.missao.roxa.missaoroxabackend.modules.user.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
             value = "SELECT * FROM users WHERE unaccent(LOWER(full_name)) = unaccent(LOWER(:fullName))",
             nativeQuery = true
     )
-    Optional<UserEntity> findByFullName(@Param(value = "fullName") String fullName);
+    Optional<UserEntity> findByName(@Param(value = "fullName") String fullName);
 
     @Query(value = """
             SELECT *

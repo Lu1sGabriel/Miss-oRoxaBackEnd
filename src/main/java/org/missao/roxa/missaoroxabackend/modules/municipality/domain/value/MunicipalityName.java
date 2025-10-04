@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @Embeddable
 @NoArgsConstructor
 @EqualsAndHashCode(of = "name")
-public final class Municipality {
+public final class MunicipalityName {
 
     private String name;
 
@@ -19,7 +19,7 @@ public final class Municipality {
     private static final int MAX_LENGTH = 100;
     private static final Pattern REGEX = Pattern.compile("^[A-Za-zÀ-ÿ'\\-\\s]+$");
 
-    public Municipality(String name) {
+    public MunicipalityName(String name) {
         this.name = validate(name);
     }
 

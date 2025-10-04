@@ -1,4 +1,4 @@
-package org.missao.roxa.missaoroxabackend.core.common.entity;
+package org.missao.roxa.missaoroxabackend.core.common.entity.metadata;
 
 import java.time.Instant;
 
